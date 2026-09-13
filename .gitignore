@@ -1,0 +1,7 @@
+build/
+DriveDroid.xcodeproj/
+Local.xcconfig
+.DS_Store
+.build/
+.swiftpm/
+xcuserdata/

@@ -1,0 +1,57 @@
+name: DriveDroid
+options:
+  bundleIdPrefix: com.mrbarkan
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+  disabledValidations: [missingConfigFiles]
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    DEAD_CODE_STRIPPING: YES
+packages:
+  ADBKit:
+    path: Packages/ADBKit
+targets:
+  DriveDroid:
+    type: application
+    platform: macOS
+    sources: [App]
+    dependencies:
+      - package: ADBKit
+      - target: DriveDroidFileProvider
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mrbarkan.DriveDroid
+        INFOPLIST_FILE: App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/DriveDroid.entitlements
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+  DriveDroidFileProvider:
+    type: app-extension
+    platform: macOS
+    sources: [FileProvider]
+    dependencies:
+      - package: ADBKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mrbarkan.DriveDroid.FileProvider
+        INFOPLIST_FILE: FileProvider/Info.plist
+        CODE_SIGN_ENTITLEMENTS: FileProvider/DriveDroidFileProvider.entitlements
+schemes:
+  DriveDroid:
+    build:
+      targets:
+        DriveDroid: all
+    run:
+      config: Debug
+    archive:
+      config: Release
